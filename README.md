@@ -1,1 +1,1 @@
-# articulated_tractor_trailer_paper
+**This code was used to obtain the simulation examples presented in article entitled** *"A novel modeling approach to improve path-tracking of an articulated tractor-trailer system for precision agriculture.*
