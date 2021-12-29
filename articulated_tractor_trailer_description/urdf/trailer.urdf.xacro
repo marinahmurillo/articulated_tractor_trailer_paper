@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="trailer">
+
+  <link name="trailer_cradle">
+  <visual>
+    <origin xyz="${-trailer_length/2} 0 0" rpy="0 0 0" />
+    <geometry>
+       <box size="${trailer_length} ${trailer_width} ${trailer_height}"/>
+    </geometry>
+  </visual>
+   <collision>
+    <origin xyz="${-trailer_length/2} 0 0" rpy="0 0 0" />
+    <geometry>
+      <box size="${trailer_length} ${trailer_width} ${trailer_height}"/>
+    </geometry>
+  </collision>
+  <xacro:cuboid_inertial mass="${trailer_mass}" x_length="${trailer_length}" y_width="${trailer_width}" z_height="${trailer_height}" xyz_origin="${-trailer_length/2} 0 ${t_wheel_vertical_offset}" >
+  </xacro:cuboid_inertial>
+</link>
+
+<joint name="trailer_extension_hub__trailer_cradle_joint" type="fixed">
+  <origin xyz="${-t_ext_length} 0 0" rpy="0 0 0" />
+  <parent link="trailer_extension_hub" />
+  <child link="trailer_cradle" />
+</joint>
+
+<link name="trailer_extension_hub">
+  <visual>
+    <origin xyz="${-t_ext_length/2} 0 0" rpy="0 0 0" />
+    <geometry>
+       <box size="${t_ext_length} ${t_ext_width} ${t_ext_height}"/>
+    </geometry>
+  </visual>
+   <collision>
+    <origin xyz="${-t_ext_length/2} 0 0" rpy="0 0 0" />
+    <geometry>
+      <box size="${t_ext_length} ${t_ext_width} ${t_ext_height}"/>
+    </geometry>
+  </collision>
+  <xacro:null_inertial />
+</link>
+
+<joint name="rear_extension_hub__trailer_extension_hub_joint" type="revolute">
+ <axis xyz="0 0 1" />
+ <origin xyz="0 0 0" rpy="0 0 0" />
+ <parent link="rear_extension_hub" />
+ <child link="trailer_extension_hub" />
+ <limit effort="100.0" lower="-${M_PI/4}" upper="${M_PI/4}" velocity="0.5" />
+ <dynamics damping="1.0" friction="1.0"/>
+</joint>
+
+<link name="trailer_wheel_axle">
+<xacro:null_inertial/>
+</link>
+
+<joint name="trailer_cradle__trailer_wheel_axle_joint" type="fixed">
+  <origin xyz="${-trailer_length+t_wheel_radius} 0 ${-t_wheel_vertical_offset}" rpy="0 0 0" />
+  <parent link="trailer_cradle" />
+  <child link="trailer_wheel_axle" />
+</joint>
+
+<xacro:tt_wheel_no_trans wheel_prefix="trailer_rear_right"
+    parent_link="trailer_wheel_axle"
+    roll = "${M_PI/2}"
+    length = "${t_wheel_length}"
+    radius= "${t_wheel_radius}"
+    mass = "${t_wheel_mass}">
+    <origin xyz="0 -${trailer_width/2+ t_wheel_length/2 + 0.05} 0" rpy="0 0 0" />
+ </xacro:tt_wheel_no_trans>
+
+ <xacro:tt_wheel_no_trans wheel_prefix="trailer_rear_left"
+    parent_link="trailer_wheel_axle"
+    roll = "${M_PI/2}"
+    length = "${t_wheel_length}"
+    radius= "${t_wheel_radius}"
+    mass = "${t_wheel_mass}">
+    <origin xyz="0 ${trailer_width/2+ t_wheel_length/2 + 0.05} 0" rpy="0 0 0" />
+ </xacro:tt_wheel_no_trans>
+</robot>

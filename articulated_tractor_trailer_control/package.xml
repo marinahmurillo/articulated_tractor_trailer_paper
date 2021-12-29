@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>articulated_tractor_trailer_control</name>
+  <version>0.0.0</version>
+  <description>The articulated_tractor_trailer_control package</description>
+  <maintainer email="mmurillo@sinc.unl.edu.ar">mmurillo</maintainer>
+  <license>BSD</license>
+  <author email="mmurillo@sinc.unl.edu.ar">Marina Murillo</author>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+
+</package>

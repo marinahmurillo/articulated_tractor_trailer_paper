@@ -1,0 +1,182 @@
+<?xml version="1.0" ?>
+<robot name="tractor_trailer" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- Included URDF/XACRO Files -->
+<xacro:include filename="$(find articulated_tractor_trailer_description)/urdf/model_properties.xacro" />
+<xacro:include filename="$(find articulated_tractor_trailer_description)/urdf/wheel.xacro" />
+<xacro:include filename="$(find articulated_tractor_trailer_description)/urdf/inertial_macros.urdf.xacro" />
+<xacro:include filename="$(find articulated_tractor_trailer_description)/urdf/steering.xacro" />
+
+<xacro:arg name="load_trailer" default="true" />
+<xacro:arg name="robot_namespace" default="/" />
+
+<!-- base_link is at the center of the tractor-trailer chassis -->
+<link name="base_link">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0" /> <!-- corro el eje del medio al borde de atrás -->
+    <geometry>
+      <cylinder length="${articulation_cylinder_height}" radius="${articulation_cylinder_radius}"/>
+    </geometry>
+  </visual>
+</link>
+
+<!-- front_cradle is the front part of the tractor chassis -->
+<link name="front_cradle">
+  <visual>
+    <origin xyz="${articulation_cylinder_radius + front_length/2} 0 0" rpy="0 0 0" /> <!-- corro el eje del medio al borde de atrás -->
+    <geometry>
+      <box size="${front_length} ${front_width} ${front_height}"/>
+    </geometry>
+  </visual>
+  <collision>
+    <origin xyz="${articulation_cylinder_radius + front_length/2} 0 0" rpy="0 0 0" />
+    <geometry>
+      <box size="${front_length} ${front_width} ${front_height}"/>
+    </geometry>
+  </collision>
+  <xacro:cuboid_inertial mass="${front_part_mass}" x_length="${front_length}" y_width="${front_width}" z_height="${front_height}" xyz_origin="${front_length/2} 0 0" >
+  </xacro:cuboid_inertial>
+</link>
+
+<!-- rear_cradle is the rear part of the tractor chassis-->
+<link name="rear_cradle">
+  <visual>
+    <origin xyz="${-articulation_cylinder_radius -rear_length/2} 0 0" rpy="0 0 0" /> <!-- corro el eje del medio al borde de adelante -->
+    <geometry>
+       <box size="${rear_length} ${rear_width} ${rear_height}"/>
+    </geometry>
+  </visual>
+   <collision>
+    <origin xyz="${-articulation_cylinder_radius -rear_length/2} 0 0" rpy="0 0 0" />
+    <geometry>
+      <box size="${rear_length} ${rear_width} ${rear_height}"/>
+    </geometry>
+  </collision>
+  <xacro:cuboid_inertial mass="${rear_part_mass}" x_length="${rear_length}" y_width="${rear_width}" z_height="${rear_height}" xyz_origin="${-rear_length/2} 0 0" >
+  </xacro:cuboid_inertial>
+</link>
+
+<joint name="base_link__front_cradle_joint" type="revolute">
+  <axis xyz="0 0 1" />
+  <origin xyz="0 0 0" rpy="0 0 0" />
+  <parent link="base_link" />
+  <child link="front_cradle" />
+  <limit effort="100.0" lower="-${M_PI/4}" upper="${M_PI/4}" velocity="1.0" />
+</joint>
+
+<transmission name="base_link__front_cradle__transmission" type="SimpleTransmission">
+<type>transmission_interface/SimpleTransmission</type>
+<actuator name="base_link__front_cradle__motor">
+        <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+	<mechanicalReduction>1</mechanicalReduction>
+  <motorTorqueConstant>10000</motorTorqueConstant>
+</actuator>
+<joint name="base_link__front_cradle_joint">
+	<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+</joint>
+</transmission>
+
+<joint name="base_link__rear_cradle_joint" type="fixed">
+  <origin xyz="0 0 0" rpy="0 0 0" />
+  <parent link="base_link" />
+  <child link="rear_cradle" />
+</joint>
+
+<link name="front_wheel_axle">
+  <xacro:null_inertial/>
+</link>
+
+<link name="rear_wheel_axle">
+  <xacro:null_inertial/>
+</link>
+
+<joint name="front_cradle__front_wheel_axle_joint" type="fixed">
+  <origin xyz="${front_length-f_wheel_radius} 0 ${-f_wheel_vertical_offset}" rpy="0 0 0" />
+  <parent link="front_cradle" />
+  <child link="front_wheel_axle" />
+</joint>
+
+<joint name="rear_cradle__rear_wheel_axle_joint" type="fixed">
+  <origin xyz="${-rear_length+r_wheel_radius} 0 ${-r_wheel_vertical_offset}" rpy="0 0 0" />
+  <parent link="rear_cradle" />
+  <child link="rear_wheel_axle" />
+</joint>
+
+<xacro:steering
+   steering_prefix="front_right"
+   parent_link="front_wheel_axle">
+   <origin xyz="0 -${front_width/2+ f_wheel_length/2 + 0.05} 0" rpy="0 0 0" />
+</xacro:steering>
+
+<xacro:steering
+   steering_prefix="front_left"
+   parent_link="front_wheel_axle">
+   <origin xyz="0 ${front_width/2+ f_wheel_length/2 + 0.05} 0" rpy="0 0 0" />
+</xacro:steering>
+
+<xacro:tt_wheel wheel_prefix="front_left"
+   parent_link="front_left_ackermann_steering_link"
+   roll = "${M_PI/2}"
+   length = "${f_wheel_length}"
+   radius= "${f_wheel_radius}"
+   mass = "${f_wheel_mass}">
+   <origin xyz="0 0 0" rpy="0 0 0" />
+</xacro:tt_wheel>
+
+<xacro:tt_wheel wheel_prefix="front_right"
+   parent_link="front_right_ackermann_steering_link"
+   roll = "${M_PI/2}"
+   length = "${f_wheel_length}"
+   radius= "${f_wheel_radius}"
+   mass = "${f_wheel_mass}">
+   <origin xyz="0 0 0" rpy="0 0 0" />
+</xacro:tt_wheel>
+
+<xacro:tt_wheel wheel_prefix="rear_left"
+    parent_link="rear_wheel_axle"
+    roll = "${M_PI/2}"
+    length = "${r_wheel_length}"
+    radius= "${r_wheel_radius}"
+    mass = "${r_wheel_mass}">
+    <origin xyz="0 ${rear_width/2+ r_wheel_length/2 + 0.05} 0" rpy="0 0 0" />
+ </xacro:tt_wheel>
+
+ <xacro:tt_wheel wheel_prefix="rear_right"
+    parent_link="rear_wheel_axle"
+    roll = "${M_PI/2}"
+    length = "${r_wheel_length}"
+    radius= "${r_wheel_radius}"
+    mass = "${r_wheel_mass}">
+    <origin xyz="0 -${rear_width/2+ r_wheel_length/2 + 0.05} 0" rpy="0 0 0" />
+ </xacro:tt_wheel>
+
+
+ <link name="rear_extension_hub">
+   <visual>
+     <origin xyz="${r_ext_length/2} 0 0" rpy="0 0 0" /> <!-- corro el eje del medio al borde de atras -->
+     <geometry>
+        <box size="${r_ext_length} ${r_ext_width} ${r_ext_height}"/>
+     </geometry>
+   </visual>
+    <collision>
+     <origin xyz="${r_ext_length/2} 0 0" rpy="0 0 0" />
+     <geometry>
+       <box size="${r_ext_length} ${r_ext_width} ${r_ext_height}"/>
+     </geometry>
+   </collision>
+   <xacro:null_inertial />
+ </link>
+
+ <joint name="rear_wheel_axle__rear_extension_hub_joint" type="fixed">
+   <origin xyz="${-r_ext_length} 0 0" rpy="0 0 0" />
+   <parent link="rear_wheel_axle" />
+   <child link="rear_extension_hub" />
+ </joint>
+
+ <xacro:if value="$(arg load_trailer)">
+   <xacro:include filename="$(find articulated_tractor_trailer_description)/urdf/trailer.urdf.xacro" />
+</xacro:if>
+
+<xacro:include filename="$(find articulated_tractor_trailer_description)/urdf/articulated_tractor_trailer.gazebo" />
+
+</robot>

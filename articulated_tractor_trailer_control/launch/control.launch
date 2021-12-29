@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- Load controller configuration -->
+  <rosparam command="load" file="$(find articulated_tractor_trailer_control)/config/control.yaml" />
+
+  <rosparam command="load" file="$(find articulated_tractor_trailer_control)/config/gazebo_ros_control.yaml" />
+
+  <!-- Spawn controllers -->
+  <node name="base_controller_spawner" pkg="controller_manager" type="spawner"
+        args="tractor_trailer_joint_publisher" />
+
+  <node name="gazebo_ros_controller_spawner" pkg="controller_manager" type="spawner"
+        args="velocity_joint_controller ackerman_steering_joint_controller articulation_joint_controller" />
+
+</launch>

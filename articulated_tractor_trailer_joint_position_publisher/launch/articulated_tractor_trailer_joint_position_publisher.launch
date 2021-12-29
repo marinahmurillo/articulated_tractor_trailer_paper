@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+  <node pkg="articulated_tractor_trailer_joint_position_publisher"
+    name="base_link__front_cradle_joint_publisher_node"
+    type="articulated_tractor_trailer_joint_position_publisher_node.py"
+    output="screen">
+    <param name="publish_frequency" type="double" value="10.0" />
+    <param name="joint_name" type="str" value="base_link__front_cradle_joint" />
+  </node>
+
+  <node pkg="articulated_tractor_trailer_joint_position_publisher"
+    name="fr_wheel_ack_steering_joint_publisher_node"
+    type="articulated_tractor_trailer_joint_position_publisher_node.py"
+    output="screen">
+    <param name="publish_frequency" type="double" value="10.0" />
+    <param name="joint_name" type="str" value="front_right_ackermann_steering_joint" />
+  </node>
+
+  <node pkg="articulated_tractor_trailer_joint_position_publisher"
+    name="fl_wheel_ack_steering_joint_publisher_node"
+    type="articulated_tractor_trailer_joint_position_publisher_node.py"
+    output="screen">
+    <param name="publish_frequency" type="double" value="10.0" />
+    <param name="joint_name" type="str" value="front_left_ackermann_steering_joint" />
+  </node>
+
+</launch>

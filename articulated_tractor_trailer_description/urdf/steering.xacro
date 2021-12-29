@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="steering_macro">
+  <xacro:macro name="steering" params="steering_prefix parent_link *joint_pose">
+
+    <link name="${steering_prefix}_ackermann_steering_link">
+      <xacro:null_inertial/>
+    </link>
+
+    <joint name="${steering_prefix}_ackermann_steering_joint" type="revolute">
+      <axis xyz="0 0 1" />
+      <xacro:insert_block name="joint_pose"/>
+      <parent link="${parent_link}" />
+      <child link="${steering_prefix}_ackermann_steering_link" />
+      <limit effort="1000000.0" lower="-${M_PI/4}" upper="${M_PI/4}" velocity="1.0" />
+    </joint>
+
+    <transmission name="${steering_prefix}_ackermann_steering_transmission" type="SimpleTransmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="${steering_prefix}_ackermann_steering_motor">
+            <hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    	<mechanicalReduction>1</mechanicalReduction>
+      <motorTorqueConstant>1580</motorTorqueConstant>
+    </actuator>
+    <joint name="${steering_prefix}_ackermann_steering_joint">
+    	<hardwareInterface>hardware_interface/PositionJointInterface</hardwareInterface>
+    </joint>
+    </transmission>
+
+  </xacro:macro>
+</robot>

@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="wheel_macros">
+
+<xacro:macro name="tt_wheel" params="wheel_prefix parent_link roll length radius mass *joint_pose">
+    <link name="${wheel_prefix}_wheel_link">
+        <xacro:cylinder_inertial mass="${mass}" radii="${radius}" height="${length}" >
+        </xacro:cylinder_inertial>
+	    <visual>
+		    <origin xyz="0 0 0" rpy="${roll} 0 0" />
+		    <geometry>
+          <mesh filename="package://articulated_tractor_trailer_description/meshes/wheel_tractor.stl"/>
+		    </geometry>
+	    </visual>
+	    <collision>
+		    <origin xyz="0 0 0" rpy="${roll} 0 0" />
+		    <geometry>
+			    <cylinder length="${length}" radius="${radius}" />
+		    </geometry>
+	    </collision>
+    </link>
+
+   <joint name="${wheel_prefix}_wheel" type="continuous">
+		<parent link="${parent_link}"/>
+		<child link="${wheel_prefix}_wheel_link"/>
+		<xacro:insert_block name="joint_pose"/>
+		<axis xyz="0 1 0" rpy="0 0 0" />
+	</joint>
+
+   <transmission name="${wheel_prefix}_wheel_trans" type="SimpleTransmission">
+		<type>transmission_interface/SimpleTransmission</type>
+		<actuator name="${wheel_prefix}_wheel_motor">
+            <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+			<mechanicalReduction>1</mechanicalReduction>
+		</actuator>
+		<joint name="${wheel_prefix}_wheel">
+			<hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+		</joint>
+	</transmission>
+
+    <gazebo reference="${wheel_prefix}_wheel_link">
+        <material>Gazebo/Black</material>
+        <selfCollide>false</selfCollide>
+        <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <fdir1 value="1 0 0"/>
+    </gazebo>
+</xacro:macro>
+
+<xacro:macro name="tt_wheel_no_trans" params="wheel_prefix parent_link roll length radius mass *joint_pose">
+    <link name="${wheel_prefix}_wheel_link">
+        <xacro:cylinder_inertial mass="${mass}" radii="${radius}" height="${length}" >
+        </xacro:cylinder_inertial>
+	    <visual>
+		    <origin xyz="0 0 0" rpy="${roll} 0 0" />
+		    <geometry>
+          <mesh filename="package://articulated_tractor_trailer_description/meshes/wheel_tractor.stl"/>
+		    </geometry>
+	    </visual>
+	    <collision>
+		    <origin xyz="0 0 0" rpy="${roll} 0 0" />
+		    <geometry>
+			    <cylinder length="${length}" radius="${radius}" />
+		    </geometry>
+	    </collision>
+    </link>
+
+   <joint name="${wheel_prefix}_wheel" type="continuous">
+		<parent link="${parent_link}"/>
+		<child link="${wheel_prefix}_wheel_link"/>
+		<xacro:insert_block name="joint_pose"/>
+		<axis xyz="0 1 0" rpy="0 0 0" />
+	</joint>
+
+  <gazebo reference="${wheel_prefix}_wheel_link">
+        <material>Gazebo/Black</material>
+        <selfCollide>false</selfCollide>
+        <mu1 value="1.0"/>
+        <mu2 value="1.0"/>
+        <kp value="10000000.0" />
+        <kd value="1.0" />
+        <fdir1 value="1 0 0"/>
+    </gazebo>
+</xacro:macro>
+
+
+</robot>

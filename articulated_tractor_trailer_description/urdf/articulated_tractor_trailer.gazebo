@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="gazebo">
+
+  <!--Add Gazebo ROS control plugin -->
+ <gazebo>
+   <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+     <robotNamespace>$(arg robot_namespace)</robotNamespace>
+   </plugin>
+ </gazebo>
+
+  <link name="rear_p3d_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <box size="0.1 0.1 0.1" />
+      </geometry>
+    </visual>
+     <collision>
+      <origin xyz="0.1 0.1 0.1" rpy="0 0 0" />
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <xacro:null_inertial />
+  </link>
+
+  <joint name="rear_p3d_link_joint" type="revolute">
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <parent link="rear_wheel_axle" />
+    <child link="rear_p3d_link" />
+    <axis xyz="0 0 1" />
+    <limit effort="1.0" lower="0" upper="0" velocity="1.0" />
+  </joint>
+
+<!-- Add ground_truth plugin for rear axle-->
+ <gazebo>
+     <plugin name="p3d_base_controller_rear_axle" filename="libgazebo_ros_p3d.so">
+         <alwaysOn>true</alwaysOn>
+         <updateRate>30.0</updateRate>
+         <robotNamespace>$(arg robot_namespace)</robotNamespace>
+         <bodyName>rear_p3d_link</bodyName>    <!--Cuerpo sobre el que se monta-->
+         <link_name>rear_p3d_link</link_name>
+         <frameId>rear_p3d_link</frameId>
+         <topicName>ground_truth/rear_axle_state</topicName>
+         <gaussianNoise>0</gaussianNoise>
+         <frameName>world</frameName>    <!--Frame de referencia-->
+         <xyzOffsets>0 0 0</xyzOffsets>
+         <rpyOffsets>0 0 0</rpyOffsets>
+     </plugin>
+ </gazebo>
+
+<!-- Add ground_truth plugin for front axle-->
+
+<link name="front_p3d_link">
+  <visual>
+    <origin xyz="0 0 0" rpy="0 0 0" />
+    <geometry>
+      <box size="0.1 0.1 0.1" />
+    </geometry>
+  </visual>
+   <collision>
+    <origin xyz="0.1 0.1 0.1" rpy="0 0 0" />
+    <geometry>
+      <box size="0.1 0.1 0.1"/>
+    </geometry>
+  </collision>
+  <xacro:null_inertial />
+</link>
+
+<joint name="front_p3d_link_joint" type="revolute">
+  <origin xyz="0 0 0" rpy="0 0 0" />
+  <parent link="front_wheel_axle" />
+  <child link="front_p3d_link" />
+  <axis xyz="0 0 1" />
+  <limit effort="1.0" lower="0" upper="0" velocity="1.0" />
+</joint>
+
+<gazebo>
+   <plugin name="p3d_base_controller_front_axle" filename="libgazebo_ros_p3d.so">
+       <alwaysOn>true</alwaysOn>
+       <updateRate>30.0</updateRate>
+       <robotNamespace>$(arg robot_namespace)</robotNamespace>
+       <bodyName>front_p3d_link</bodyName>    <!--Cuerpo sobre el que se monta-->
+       <link_name>front_p3d_link</link_name>
+       <frameId>front_p3d_link</frameId>
+       <topicName>ground_truth/front_axle_state</topicName>
+       <gaussianNoise>0</gaussianNoise>
+       <frameName>world</frameName>    <!--Frame de referencia-->
+       <xyzOffsets>0 0 0</xyzOffsets>
+       <rpyOffsets>0 0 0</rpyOffsets>
+   </plugin>
+</gazebo>
+
+<!-- Adding color to the chassis-->
+  <gazebo reference="front_cradle">
+    <material>Gazebo/Blue</material>
+  </gazebo>
+  <gazebo reference="rear_cradle">
+    <material>Gazebo/Red</material>
+  </gazebo>
+  <gazebo reference="base_link">
+    <material>Gazebo/White</material>
+  </gazebo>
+
+ <xacro:if value="$(arg load_trailer)">
+   <!-- Add ground_truth plugin for trailer axle-->
+   <link name="trailer_p3d_link">
+     <visual>
+       <origin xyz="0 0 0" rpy="0 0 0" />
+       <geometry>
+         <box size="0.1 0.1 0.1" />
+       </geometry>
+     </visual>
+      <collision>
+       <origin xyz="0.1 0.1 0.1" rpy="0 0 0" />
+       <geometry>
+         <box size="0.1 0.1 0.1"/>
+       </geometry>
+     </collision>
+     <xacro:null_inertial />
+   </link>
+
+   <joint name="trailer_p3d_link_joint" type="revolute">
+     <origin xyz="0 0 0" rpy="0 0 0" />
+     <parent link="trailer_wheel_axle" />
+     <child link="trailer_p3d_link" />
+     <axis xyz="0 0 1" />
+     <limit effort="1.0" lower="0" upper="0" velocity="1.0" />
+   </joint>
+
+   <gazebo>
+       <plugin name="p3d_base_controller_trailer_axle" filename="libgazebo_ros_p3d.so">
+           <alwaysOn>true</alwaysOn>
+           <updateRate>30.0</updateRate>
+           <robotNamespace>$(arg robot_namespace)</robotNamespace>
+           <link_name>trailer_p3d_link</link_name>
+           <bodyName>trailer_p3d_link</bodyName>    <!--Cuerpo sobre el que se monta-->
+           <frameId>trailer_p3d_link</frameId>
+           <topicName>ground_truth/trailer_axle_state</topicName>
+           <gaussianNoise>0</gaussianNoise>
+           <frameName>world</frameName>    <!--Frame de referencia-->
+           <xyzOffsets>0 0 0</xyzOffsets>
+           <rpyOffsets>0 0 0</rpyOffsets>
+       </plugin>
+   </gazebo>
+    <gazebo reference="trailer_cradle">
+      <material>Gazebo/Green</material>
+    </gazebo>
+ </xacro:if>
+</robot>

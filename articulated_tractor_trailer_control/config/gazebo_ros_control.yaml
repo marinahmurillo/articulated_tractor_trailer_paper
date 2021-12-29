@@ -1,0 +1,26 @@
+velocity_joint_controller:
+  type: velocity_controllers/JointGroupVelocityController
+  joints:
+    - rear_left_wheel
+    - rear_right_wheel
+    - front_left_wheel
+    - front_right_wheel
+  gains:
+    rear_left_wheel: {p: 100.0, i: 0.01, d: 10.0}
+    rear_right_wheel: {p: 100.0, i: 0.01, d: 10.0}
+    front_left_wheel: {p: 100.0, i: 0.01, d: 10.0}
+    front_right_wheel: {p: 100.0, i: 0.01, d: 10.0}
+
+ackerman_steering_joint_controller:
+  type: position_controllers/JointGroupPositionController
+  joints:
+    - front_right_ackermann_steering_joint
+    - front_left_ackermann_steering_joint
+  gains:
+     front_right_ackermann_steering_joint: {p: 100.0, i: 0.01, d: 10.0}
+     front_left_ackermann_steering_joint: {p: 100.0, i: 0.01, d: 10.0}
+
+articulation_joint_controller:
+  type: position_controllers/JointPositionController
+  joint: base_link__front_cradle_joint
+  pid: {p: 100.0, i: 0.01, d: 10.0}

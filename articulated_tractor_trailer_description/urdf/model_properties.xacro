@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="model_properties">
+
+  <xacro:property name="M_PI" value="3.14159"/>
+
+  <!-- front chassis size (m) -->
+  <xacro:property name="front_length" value="1.0"/>
+  <xacro:property name="front_width" value="0.5"/>
+  <xacro:property name="front_height" value="0.5"/>
+
+  <!-- rear chassis size (m) -->
+  <xacro:property name="rear_length" value="1.5"/>
+  <xacro:property name="rear_width" value="0.5"/>
+  <xacro:property name="rear_height" value="0.5"/>
+
+  <xacro:property name="articulation_cylinder_radius" value="0.1"/>
+  <xacro:property name="articulation_cylinder_height" value="0.5"/>
+
+  <!-- trailer chassis size (m) -->
+  <xacro:property name="trailer_length" value="0.5"/>
+  <xacro:property name="trailer_width" value="1.5"/>
+  <xacro:property name="trailer_height" value="0.2"/>
+
+  <!-- rear and trailer extension hub size (m) -->
+  <xacro:property name="r_ext_length" value="0.5"/>
+  <xacro:property name="r_ext_width" value="0.1"/>
+  <xacro:property name="r_ext_height" value="0.1"/>
+  <xacro:property name="t_ext_length" value="1.0"/>
+  <xacro:property name="t_ext_width" value="0.1"/>
+  <xacro:property name="t_ext_height" value="0.1"/>
+
+  <!-- front wheel properties (m) -->
+  <xacro:property name="f_wheel_length" value="0.1"/>
+  <xacro:property name="f_wheel_radius" value="0.2"/>
+  <xacro:property name="f_wheel_vertical_offset" value="${front_height/2-f_wheel_radius/2}"/>
+
+  <!-- rear wheel properties (m) -->
+  <xacro:property name="r_wheel_length" value="0.1"/>
+  <xacro:property name="r_wheel_radius" value="0.2"/>
+  <xacro:property name="r_wheel_vertical_offset" value="${rear_height/2-r_wheel_radius/2}"/>
+
+  <!-- trailer wheel properties (m) -->
+  <xacro:property name="t_wheel_length" value="0.1"/>
+  <xacro:property name="t_wheel_radius" value="0.2"/>
+  <xacro:property name="t_wheel_vertical_offset" value="${trailer_height/2-t_wheel_radius/2}"/>
+
+  <!-- mass properties (kg) -->
+  <xacro:property name="front_part_mass" value="1.0"/>
+  <xacro:property name="rear_part_mass" value="1.5"/>
+  <xacro:property name="f_wheel_mass" value="1.0"/>
+  <xacro:property name="r_wheel_mass" value="1.0"/>
+  <xacro:property name="t_wheel_mass" value="1.0"/>
+  <xacro:property name="trailer_mass" value="3.0"/>
+  <xacro:property name="r_ext_mass" value="0.5" />
+  <xacro:property name="t_ext_mass" value="0.5" />
+
+</robot>

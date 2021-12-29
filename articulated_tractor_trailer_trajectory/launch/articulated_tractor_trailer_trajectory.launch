@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+  <include file="$(find articulated_tractor_trailer_joint_position_publisher)/launch/articulated_tractor_trailer_joint_position_publisher.launch" />
+
+  <node pkg="rosbag" type="record" name="record" output="screen" args="-o $(find articulated_tractor_trailer_trajectory)/bags/topics -a"/>
+
+  <node pkg="articulated_tractor_trailer_trajectory"
+    name="articulated_tractor_trailer_trajectory"
+    type="articulated_tractor_trailer_trajectory.py"
+    output="screen">
+  </node>
+</launch>

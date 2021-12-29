@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="robot_namespace" default="/" />
+  <arg name="x" default="3.1" />
+  <arg name="y" default="0.0" />
+  <arg name="z" default="0.35" />
+  <arg name="yaw" default="0.0" />
+
+  <!-- Load the URDF into the ROS Parameter Server -->
+  <include file="$(find articulated_tractor_trailer_description)/launch/description.launch" />
+
+  <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot in Gazebo -->
+  <node name="spawn_tractor_trailer" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-x $(arg x)
+              -y $(arg y)
+              -z $(arg z)
+              -Y $(arg yaw)
+              -unpause
+              -urdf
+              -param robot_description
+              -model tractor_trailer
+              -robot_namespace $(arg robot_namespace)" />
+
+  <!-- Launch controllers -->
+  <include file="$(find articulated_tractor_trailer_control)/launch/control.launch" />
+
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
+
+</launch>

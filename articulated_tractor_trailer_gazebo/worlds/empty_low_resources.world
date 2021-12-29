@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<sdf version='1.4'>
+  <world name="default">
+    <gravity>0 0 -9.8</gravity>
+    <physics default="1" name="default_physics" type="ode">
+      <!--
+        These parameters should give real time factor near 1.0 on our notebooks.
+        http://gazebosim.org/tutorials?tut=physics_params&cat=physics
+        https://answers.ros.org/question/35699/gazebo-real-and-simulation-time/
+        https://answers.gazebosim.org//question/18075/ros-gazebo-real-time-factor/
+      -->
+      <real_time_update_rate>100.0</real_time_update_rate>
+      <!-- <max_contacts>20</max_contacts> -->
+      <max_step_size>0.01</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>0</shadows>
+    </scene>
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    <include>
+      <uri>model://sun</uri>
+    </include>
+  </world>
+</sdf>
