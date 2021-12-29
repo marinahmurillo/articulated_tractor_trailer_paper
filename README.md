@@ -6,7 +6,7 @@ To run this examples you need to install:
 
 If you want to use the HSL library, then you have to install the [HSL_MA97](https://www.hsl.rl.ac.uk/catalogue/hsl_ma97.html) from the HSL Mathematical Software Library. After installation, you might be able to uncomment line 116 from `export_articulated_tractor_trailer_model.py` and `export_articulated_tractor_model.py`.
 
-Then, you have to create a `catkin workspace`, clone the code provided in this repository in the `src` folder and build the packages provided.
+Then, you have to create a [catkin workspace](http://wiki.ros.org/catkin/Tutorials/create_a_workspace), clone the code provided in this repository in the `src` folder and then build the packages.
 
 To run the examples controlling the trailer xy-position, in one terminal window run the following:
 
