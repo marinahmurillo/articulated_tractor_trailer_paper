@@ -1,4 +1,5 @@
-**This code was used to obtain the simulation examples presented in article entitled** *"A novel modeling approach to improve path-tracking of an articulated tractor-trailer system for precision agriculture.*
+**This code was used to obtain the simulation examples presented in article entitled** *"Improving path-tracking performance of an articulated tractor-trailer
+system using a non-linear kinematic model"*
 
 To run this examples you need to install:
 1. [ROS Noetic](http://wiki.ros.org/noetic/Installation/Ubuntu) 
